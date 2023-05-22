@@ -25,8 +25,8 @@ pub struct ProductTree {
 pub struct Branch {
     pub items: Vec<Branch>,
     #[serde(rename = "Type")]
-    pub type_field: i64,
-    pub name: String,
+    pub type_field: Option<i64>,
+    pub name: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -69,7 +69,7 @@ pub struct Note {
     #[serde(rename = "Type")]
     pub type_field: i64,
     pub ordinal: String,
-    pub value: String,
+    pub value: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -162,7 +162,10 @@ pub async fn fetch_patch_tuesday_report(patch_tuesday_date: NaiveDate) {
             // Now that we've verified we have a response, we need to the JSON file
             match response.json::<CsrfDoc>().await {
                 Ok(parsed) => println!("Parsed {:#?}!", parsed.vulnerability),
-                Err(e) => println!("{}", e),
+                Err(e) => println!(
+                    "Ran into an error parsing the Patch Tuesday report (go complain to Euan - and be sure to send the error & args!):- {}",
+                    e
+                ),
             }
         }
         _ => panic!(
