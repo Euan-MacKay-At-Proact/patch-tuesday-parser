@@ -1,9 +1,12 @@
+pub mod data_structure;
+pub mod report_formatter;
+pub mod web_request;
+
 use chrono::{Datelike, Months, NaiveDate, Utc, Weekday};
 use clap::Parser;
+use report_formatter::generate_report;
 use web_request::fetch_patch_tuesday_report;
 //use std::fs;
-
-pub mod web_request;
 
 #[derive(Parser)]
 #[clap(
@@ -44,7 +47,12 @@ async fn main() {
     };
 
     let patch_tuesday_date: NaiveDate = get_patch_tuesday_date(date);
-    fetch_patch_tuesday_report(patch_tuesday_date).await;
+    let response = fetch_patch_tuesday_report(patch_tuesday_date)
+        .await
+        .unwrap();
+    let report = generate_report(response);
+    println!("{}\n{}", report.to_html(), report);
+    //println!("Parsed {:#?}!", response.vulnerability)
 }
 
 fn get_patch_tuesday_date(date: NaiveDate) -> NaiveDate {
@@ -61,7 +69,6 @@ fn get_patch_tuesday_date(date: NaiveDate) -> NaiveDate {
                 .checked_sub_months(Months::new(1))
                 .unwrap();
             get_patch_tuesday_date(new_date);
-            todo!("Add verbosity");
         } else {
             println!(
                 "Invalid date:- Current technology cannot retrieve Patch Tuesdays from the future!\n\

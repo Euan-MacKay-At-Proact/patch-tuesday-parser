@@ -25,7 +25,7 @@ pub struct DocumentPublisher {
 #[serde(rename_all = "PascalCase")]
 pub struct DocumentTracking {
     pub identification: Identification,
-    pub status: i64,
+    pub status: i16,
     pub version: String,
     pub revision_history: Vec<RevisionHistory>,
     pub initial_release_date: String,
@@ -54,7 +54,7 @@ pub struct DocumentNote {
     pub title: String,
     pub audience: Option<String>,
     #[serde(rename = "Type")]
-    pub type_field: i64,
+    pub type_field: i16,
     pub ordinal: String,
     pub value: Option<String>,
 }
@@ -97,7 +97,7 @@ pub struct Vulnerability {
     pub product_statuses: Vec<ProductStatus>,
     pub threats: Vec<Threat>,
     #[serde(rename = "CVSSScoreSets")]
-    pub cvssscore_sets: Vec<CvssscoreSet>,
+    pub cvss_score_sets: Vec<CvssScoreSet>,
     pub remediations: Vec<Remediation>,
     pub acknowledgments: Vec<Acknowledgment>,
     pub ordinal: String,
@@ -109,7 +109,7 @@ pub struct Vulnerability {
 pub struct Note {
     pub title: String,
     #[serde(rename = "Type")]
-    pub type_field: i64,
+    pub type_field: i16,
     pub ordinal: String,
     pub value: Option<String>,
 }
@@ -120,7 +120,7 @@ pub struct ProductStatus {
     #[serde(rename = "ProductID")]
     pub product_id: Vec<String>,
     #[serde(rename = "Type")]
-    pub type_field: i64,
+    pub type_field: i16,
 }
 
 #[derive(Debug, Deserialize, Default)]
@@ -131,15 +131,15 @@ pub struct Threat {
     #[serde(default)]
     pub product_id: Option<Vec<String>>,
     #[serde(rename = "Type")]
-    pub type_field: i64,
+    pub type_field: i16,
     pub date_specified: bool,
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "PascalCase")]
-pub struct CvssscoreSet {
-    pub base_score: f64,
-    pub temporal_score: f64,
+pub struct CvssScoreSet {
+    pub base_score: f32,
+    pub temporal_score: f32,
     pub vector: String,
     #[serde(rename = "ProductID")]
     pub product_id: Vec<String>,
@@ -155,7 +155,7 @@ pub struct Remediation {
     #[serde(rename = "ProductID")]
     pub product_id: Vec<String>,
     #[serde(rename = "Type")]
-    pub type_field: i64,
+    pub type_field: i16,
     pub date_specified: bool,
     pub affected_files: Vec<AffectedFile>,
     pub restart_required: Option<ValString>,
